@@ -1,14 +1,22 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Camera, Settings, Zap, RotateCcw, Download, Share2 } from 'lucide-react'
-import type { PhotoMode } from '../App'
+import { Camera, Settings, Zap, RotateCcw, Download, Share2, SwitchCamera, Video, Pause, Play } from 'lucide-react'
+import type { PhotoMode, CameraType } from '../App'
 
 interface ControlPanelProps {
   isProcessing: boolean
   onCapture: () => void
   selectedMode: PhotoMode
+  cameraType: CameraType
+  onCameraToggle: () => void
 }
 
-export const ControlPanel = ({ isProcessing, onCapture, selectedMode }: ControlPanelProps) => {
+export const ControlPanel = ({ 
+  isProcessing, 
+  onCapture, 
+  selectedMode, 
+  cameraType, 
+  onCameraToggle 
+}: ControlPanelProps) => {
   const modeIcons = {
     auto: '✨',
     portrait: '👤',
@@ -24,25 +32,25 @@ export const ControlPanel = ({ isProcessing, onCapture, selectedMode }: ControlP
     {
       icon: Settings,
       label: 'إعدادات',
-      color: 'from-blue-500 to-purple-500',
+      color: 'from-neon-orange to-neon-gold',
       action: () => console.log('Settings')
     },
     {
-      icon: RotateCcw,
-      label: 'إعادة تعيين',
-      color: 'from-yellow-500 to-orange-500',
-      action: () => console.log('Reset')
+      icon: Video,
+      label: 'فيديو',
+      color: 'from-neon-emerald to-neon-cyan',
+      action: () => console.log('Video')
     },
     {
       icon: Download,
       label: 'تحميل',
-      color: 'from-green-500 to-emerald-500',
+      color: 'from-neon-cyan to-neon-magenta',
       action: () => console.log('Download')
     },
     {
       icon: Share2,
       label: 'مشاركة',
-      color: 'from-pink-500 to-rose-500',
+      color: 'from-neon-magenta to-neon-orange',
       action: () => console.log('Share')
     }
   ]
@@ -64,7 +72,7 @@ export const ControlPanel = ({ isProcessing, onCapture, selectedMode }: ControlP
               className={`
                 w-14 h-14 rounded-full bg-gradient-to-r ${button.color} 
                 flex items-center justify-center text-white shadow-lg
-                hover:shadow-xl transition-all duration-300
+                hover:shadow-xl transition-all duration-300 relative overflow-hidden
               `}
               whileHover={{ 
                 scale: 1.1,
@@ -74,18 +82,82 @@ export const ControlPanel = ({ isProcessing, onCapture, selectedMode }: ControlP
               onClick={button.action}
               title={button.label}
             >
-              <Icon className="w-6 h-6" />
+              <Icon className="w-6 h-6 relative z-10" />
+              <motion.div
+                className="absolute inset-0 bg-white/20 rounded-full"
+                initial={{ scale: 0, opacity: 0 }}
+                whileHover={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
             </motion.button>
           )
         })}
       </div>
 
+      {/* Camera Switch Button */}
+      <motion.button
+        onClick={onCameraToggle}
+        className={`
+          w-16 h-16 rounded-full relative overflow-hidden
+          ${cameraType === 'back' 
+            ? 'bg-gradient-to-r from-neon-orange to-neon-gold' 
+            : 'bg-gradient-to-r from-neon-gold to-neon-emerald'
+          }
+          flex items-center justify-center text-white shadow-2xl
+          transition-all duration-500
+        `}
+        whileHover={{ 
+          scale: 1.1,
+          rotate: 180,
+          boxShadow: cameraType === 'back'
+            ? '0 15px 40px rgba(251, 146, 60, 0.5)'
+            : '0 15px 40px rgba(245, 158, 11, 0.5)'
+        }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={cameraType}
+            initial={{ opacity: 0, rotate: -180 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            exit={{ opacity: 0, rotate: 180 }}
+            transition={{ duration: 0.3 }}
+            className="flex items-center justify-center"
+          >
+            {cameraType === 'back' ? (
+              <span className="text-2xl">📷</span>
+            ) : (
+              <span className="text-2xl">🤳</span>
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Rotating border */}
+        <motion.div
+          className="absolute inset-0 rounded-full border-2 border-white/30"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        />
+      </motion.button>
+
       {/* Mode Indicator */}
       <motion.div 
-        className="glass-effect rounded-full p-3 border border-white/20"
+        className="glass-effect rounded-full p-3 border border-white/20 relative overflow-hidden"
         whileHover={{ scale: 1.05 }}
       >
-        <div className="text-2xl">{modeIcons[selectedMode]}</div>
+        <div className="text-2xl relative z-10">{modeIcons[selectedMode]}</div>
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-neon-orange/20 to-neon-gold/20 rounded-full"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{ 
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </motion.div>
 
       {/* Main Capture Button */}
@@ -93,8 +165,8 @@ export const ControlPanel = ({ isProcessing, onCapture, selectedMode }: ControlP
         className={`
           w-20 h-20 rounded-full relative overflow-hidden
           ${isProcessing 
-            ? 'bg-gradient-to-r from-orange-500 to-red-500' 
-            : 'bg-gradient-to-r from-neon-blue to-neon-purple'
+            ? 'bg-gradient-to-r from-red-500 to-orange-500' 
+            : 'bg-gradient-to-r from-neon-emerald to-neon-cyan'
           }
           flex items-center justify-center text-white shadow-2xl
           transition-all duration-300
@@ -102,8 +174,8 @@ export const ControlPanel = ({ isProcessing, onCapture, selectedMode }: ControlP
         whileHover={{ 
           scale: 1.1,
           boxShadow: isProcessing 
-            ? '0 15px 40px rgba(255, 107, 107, 0.5)'
-            : '0 15px 40px rgba(0, 212, 255, 0.5)'
+            ? '0 15px 40px rgba(239, 68, 68, 0.5)'
+            : '0 15px 40px rgba(16, 185, 129, 0.5)'
         }}
         whileTap={{ scale: 0.95 }}
         onClick={onCapture}
@@ -157,6 +229,15 @@ export const ControlPanel = ({ isProcessing, onCapture, selectedMode }: ControlP
             }}
           />
         )}
+
+        {/* Shimmer effect */}
+        <motion.div
+          className="absolute inset-0 rounded-full animate-shimmer"
+          style={{
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+            backgroundSize: '200% 100%'
+          }}
+        />
       </motion.button>
 
       {/* Capture Status */}
@@ -172,6 +253,16 @@ export const ControlPanel = ({ isProcessing, onCapture, selectedMode }: ControlP
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Camera Type Label */}
+      <motion.div
+        className="glass-effect rounded-full px-3 py-1 text-xs text-white/80 font-medium"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+      >
+        {cameraType === 'back' ? 'خلفية' : 'أمامية'}
+      </motion.div>
     </motion.div>
   )
 }

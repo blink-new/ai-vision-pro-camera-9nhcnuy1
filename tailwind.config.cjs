@@ -14,17 +14,17 @@ module.exports = {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			primary: {
-  				'50': '#f0f9ff',
-  				'100': '#e0f2fe',
-  				'200': '#bae6fd',
-  				'300': '#7dd3fc',
-  				'400': '#38bdf8',
-  				'500': '#0ea5e9',
-  				'600': '#0284c7',
-  				'700': '#0369a1',
-  				'800': '#075985',
-  				'900': '#0c4a6e',
-  				'950': '#082f49',
+  				'50': '#fff7ed',
+  				'100': '#ffedd5',
+  				'200': '#fed7aa',
+  				'300': '#fdba74',
+  				'400': '#fb923c',
+  				'500': '#f97316',
+  				'600': '#ea580c',
+  				'700': '#c2410c',
+  				'800': '#9a3412',
+  				'900': '#7c2d12',
+  				'950': '#431407',
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
@@ -81,9 +81,11 @@ module.exports = {
   				ring: 'hsl(var(--sidebar-ring))'
   			},
   			// AI Vision Pro custom colors
-  			'neon-blue': 'hsl(var(--neon-blue))',
-  			'neon-purple': 'hsl(var(--neon-purple))',
-  			'neon-green': 'hsl(var(--neon-green))'
+  			'neon-orange': 'hsl(var(--neon-orange))',
+  			'neon-gold': 'hsl(var(--neon-gold))',
+  			'neon-emerald': 'hsl(var(--neon-emerald))',
+  			'neon-cyan': 'hsl(var(--neon-cyan))',
+  			'neon-magenta': 'hsl(var(--neon-magenta))'
   		},
   		fontFamily: {
   			sans: [
@@ -99,7 +101,8 @@ module.exports = {
   			'accordion-up': 'accordion-up 0.2s ease-out',
   			'glow': 'glow 2s ease-in-out infinite alternate',
   			'float': 'float 6s ease-in-out infinite',
-  			'pulse-glow': 'pulse-glow 3s ease-in-out infinite'
+  			'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+  			'shimmer': 'shimmer 2s infinite'
   		},
   		keyframes: {
   			'fade-in': {
@@ -138,10 +141,10 @@ module.exports = {
   			},
   			'glow': {
   				'0%, 100%': { 
-  					textShadow: '0 0 30px hsl(var(--neon-blue) / 0.5)' 
+  					textShadow: '0 0 30px hsl(var(--neon-orange) / 0.5)' 
   				},
   				'50%': { 
-  					textShadow: '0 0 50px hsl(var(--neon-purple) / 0.8)' 
+  					textShadow: '0 0 50px hsl(var(--neon-gold) / 0.8)' 
   				}
   			},
   			'float': {
@@ -158,6 +161,14 @@ module.exports = {
   				},
   				'50%': { 
   					opacity: '0.5' 
+  				}
+  			},
+  			'shimmer': {
+  				'0%': {
+  					backgroundPosition: '-200% 0'
+  				},
+  				'100%': {
+  					backgroundPosition: '200% 0'
   				}
   			}
   		},

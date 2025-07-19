@@ -13,6 +13,7 @@ interface RadioGroupProps {
   options: { value: string; label: string }[]
   selectedValue: string
   onChange: (value: string) => void
+  color: string
 }
 
 interface CheckboxGroupProps {
@@ -23,32 +24,44 @@ interface CheckboxGroupProps {
   onChange: (key: string, value: boolean) => void
 }
 
-const RadioGroup = ({ label, icon, options, selectedValue, onChange }: RadioGroupProps) => (
+const RadioGroup = ({ label, icon, options, selectedValue, onChange, color }: RadioGroupProps) => (
   <motion.div 
-    className="glass-effect rounded-2xl p-6 border border-white/5"
+    className="glass-effect rounded-2xl p-6 border border-white/5 relative overflow-hidden"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6 }}
     whileHover={{ y: -2 }}
   >
-    <div className="flex items-center gap-3 mb-4">
+    {/* Background gradient */}
+    <motion.div
+      className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 hover:opacity-5 transition-opacity duration-300`}
+    />
+    
+    <div className="flex items-center gap-3 mb-4 relative z-10">
       {icon}
       <h3 className="text-xl font-semibold text-white">{label}</h3>
     </div>
     
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 relative z-10">
       {options.map((option) => (
         <motion.label
           key={option.value}
           className={`
             relative cursor-pointer px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 overflow-hidden
             ${selectedValue === option.value
-              ? 'bg-gradient-to-r from-neon-blue to-neon-purple text-white shadow-lg shadow-neon-blue/30'
-              : 'bg-white/5 border border-white/10 text-gray-300 hover:border-neon-blue/50 hover:text-white'
+              ? `bg-gradient-to-r ${color} text-white shadow-lg`
+              : 'bg-white/5 border border-white/10 text-gray-300 hover:border-neon-orange/50 hover:text-white'
             }
           `}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          style={{
+            boxShadow: selectedValue === option.value ? 
+              `0 8px 25px ${color.includes('orange') ? 'rgba(251, 146, 60, 0.3)' : 
+                           color.includes('gold') ? 'rgba(245, 158, 11, 0.3)' :
+                           color.includes('emerald') ? 'rgba(16, 185, 129, 0.3)' :
+                           'rgba(6, 182, 212, 0.3)'}` : 'none'
+          }}
         >
           <input
             type="radio"
@@ -75,26 +88,31 @@ const RadioGroup = ({ label, icon, options, selectedValue, onChange }: RadioGrou
 
 const CheckboxGroup = ({ label, icon, options, values, onChange }: CheckboxGroupProps) => (
   <motion.div 
-    className="glass-effect rounded-2xl p-6 border border-white/5"
+    className="glass-effect rounded-2xl p-6 border border-white/5 relative overflow-hidden"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6 }}
     whileHover={{ y: -2 }}
   >
-    <div className="flex items-center gap-3 mb-4">
+    {/* Background gradient */}
+    <motion.div
+      className="absolute inset-0 bg-gradient-to-br from-neon-magenta to-neon-emerald opacity-0 hover:opacity-5 transition-opacity duration-300"
+    />
+    
+    <div className="flex items-center gap-3 mb-4 relative z-10">
       {icon}
       <h3 className="text-xl font-semibold text-white">{label}</h3>
     </div>
     
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 relative z-10">
       {options.map((option) => (
         <motion.label
           key={option.key}
           className={`
             relative cursor-pointer p-4 rounded-xl text-sm font-medium transition-all duration-300 overflow-hidden flex items-center gap-3
             ${values[option.key]
-              ? 'bg-gradient-to-r from-neon-purple to-neon-green text-white shadow-lg shadow-neon-purple/30'
-              : 'bg-white/5 border border-white/10 text-gray-300 hover:border-neon-purple/50 hover:text-white'
+              ? 'bg-gradient-to-r from-neon-magenta to-neon-emerald text-white shadow-lg shadow-neon-magenta/30'
+              : 'bg-white/5 border border-white/10 text-gray-300 hover:border-neon-magenta/50 hover:text-white'
             }
           `}
           whileHover={{ scale: 1.02 }}
@@ -114,7 +132,23 @@ const CheckboxGroup = ({ label, icon, options, values, onChange }: CheckboxGroup
             transition={{ duration: 0.6, repeat: values[option.key] ? Infinity : 0, repeatDelay: 2 }}
           />
           
-          <span className="text-lg">{option.icon}</span>
+          {/* Pulsing effect for active features */}
+          {values[option.key] && (
+            <motion.div
+              className="absolute inset-0 bg-white/10 rounded-xl"
+              animate={{ 
+                opacity: [0.1, 0.3, 0.1],
+                scale: [1, 1.02, 1]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          )}
+          
+          <span className="text-lg relative z-10">{option.icon}</span>
           <span className="relative z-10">{option.label}</span>
         </motion.label>
       ))}
@@ -166,40 +200,44 @@ export const AdvancedSettings = ({ settings, onSettingsChange }: AdvancedSetting
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <RadioGroup
           label="📊 الدقة والجودة"
-          icon={<BarChart3 className="w-6 h-6 text-neon-blue" />}
+          icon={<BarChart3 className="w-6 h-6 text-neon-orange" />}
           options={resolutionOptions}
           selectedValue={settings.resolution}
           onChange={(value) => onSettingsChange({ resolution: value as CameraSettings['resolution'] })}
+          color="from-neon-orange to-neon-gold"
         />
 
         <RadioGroup
           label="🎬 معدل الإطارات"
-          icon={<Zap className="w-6 h-6 text-neon-purple" />}
+          icon={<Zap className="w-6 h-6 text-neon-gold" />}
           options={fpsOptions}
           selectedValue={settings.fps}
           onChange={(value) => onSettingsChange({ fps: value as CameraSettings['fps'] })}
+          color="from-neon-gold to-neon-emerald"
         />
 
         <RadioGroup
           label="🧠 مستوى الذكاء الاصطناعي"
-          icon={<Brain className="w-6 h-6 text-neon-green" />}
+          icon={<Brain className="w-6 h-6 text-neon-emerald" />}
           options={aiLevelOptions}
           selectedValue={settings.aiLevel}
           onChange={(value) => onSettingsChange({ aiLevel: value as CameraSettings['aiLevel'] })}
+          color="from-neon-emerald to-neon-cyan"
         />
 
         <RadioGroup
           label="🎨 نمط الألوان"
-          icon={<Palette className="w-6 h-6 text-neon-blue" />}
+          icon={<Palette className="w-6 h-6 text-neon-cyan" />}
           options={colorModeOptions}
           selectedValue={settings.colorMode}
           onChange={(value) => onSettingsChange({ colorMode: value as CameraSettings['colorMode'] })}
+          color="from-neon-cyan to-neon-magenta"
         />
       </div>
 
       <CheckboxGroup
         label="🔧 الميزات الإضافية"
-        icon={<Wrench className="w-6 h-6 text-neon-purple" />}
+        icon={<Wrench className="w-6 h-6 text-neon-magenta" />}
         options={featureOptions}
         values={settings.features}
         onChange={(key, value) => 

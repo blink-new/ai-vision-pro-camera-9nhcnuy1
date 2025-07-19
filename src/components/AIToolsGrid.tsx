@@ -29,7 +29,7 @@ export const AIToolsGrid = () => {
       icon: <Eye className="w-8 h-8" />,
       title: 'كشف الكائنات',
       description: 'تحديد وتتبع الكائنات في الوقت الفعلي',
-      color: 'from-blue-500 to-cyan-500',
+      color: 'from-neon-orange to-neon-gold',
       isActive: true
     },
     {
@@ -37,7 +37,7 @@ export const AIToolsGrid = () => {
       icon: <Scan className="w-8 h-8" />,
       title: 'تحليل المشهد',
       description: 'فهم السياق والبيئة المحيطة',
-      color: 'from-purple-500 to-pink-500',
+      color: 'from-neon-gold to-neon-emerald',
       isActive: true
     },
     {
@@ -45,7 +45,7 @@ export const AIToolsGrid = () => {
       icon: <Palette className="w-8 h-8" />,
       title: 'تحسين الألوان',
       description: 'تعديل الألوان تلقائياً للحصول على أفضل نتيجة',
-      color: 'from-green-500 to-emerald-500',
+      color: 'from-neon-emerald to-neon-cyan',
       isActive: false
     },
     {
@@ -53,7 +53,7 @@ export const AIToolsGrid = () => {
       icon: <Target className="w-8 h-8" />,
       title: 'تركيز ذكي',
       description: 'تركيز تلقائي على أهم العناصر',
-      color: 'from-orange-500 to-red-500',
+      color: 'from-neon-cyan to-neon-magenta',
       isActive: true
     },
     {
@@ -61,7 +61,7 @@ export const AIToolsGrid = () => {
       icon: <Zap className="w-8 h-8" />,
       title: 'تتبع الحركة',
       description: 'متابعة الأهداف المتحركة بدقة عالية',
-      color: 'from-yellow-500 to-orange-500',
+      color: 'from-neon-magenta to-neon-orange',
       isActive: false
     },
     {
@@ -69,7 +69,7 @@ export const AIToolsGrid = () => {
       icon: <Sparkles className="w-8 h-8" />,
       title: 'تقليل الضوضاء',
       description: 'إزالة التشويش وتحسين جودة الصورة',
-      color: 'from-indigo-500 to-purple-500',
+      color: 'from-neon-orange to-neon-emerald',
       isActive: true
     },
     {
@@ -77,7 +77,7 @@ export const AIToolsGrid = () => {
       icon: <Brain className="w-8 h-8" />,
       title: 'معالجة عصبية',
       description: 'تحسين الصور باستخدام الشبكات العصبية',
-      color: 'from-pink-500 to-rose-500',
+      color: 'from-neon-emerald to-neon-gold',
       isActive: true
     },
     {
@@ -85,7 +85,7 @@ export const AIToolsGrid = () => {
       icon: <Camera className="w-8 h-8" />,
       title: 'تركيب تلقائي',
       description: 'اقتراح أفضل زوايا وتركيبات للصورة',
-      color: 'from-teal-500 to-cyan-500',
+      color: 'from-neon-gold to-neon-cyan',
       isActive: false
     },
     {
@@ -93,7 +93,7 @@ export const AIToolsGrid = () => {
       icon: <Image className="w-8 h-8" />,
       title: 'نقل الأسلوب',
       description: 'تطبيق أساليب فنية مختلفة على الصور',
-      color: 'from-violet-500 to-purple-500',
+      color: 'from-neon-cyan to-neon-magenta',
       isActive: false
     },
     {
@@ -101,7 +101,7 @@ export const AIToolsGrid = () => {
       icon: <Wand2 className="w-8 h-8" />,
       title: 'تحسين سحري',
       description: 'تحسين شامل بنقرة واحدة',
-      color: 'from-emerald-500 to-teal-500',
+      color: 'from-neon-magenta to-neon-emerald',
       isActive: true
     }
   ])
@@ -120,8 +120,8 @@ export const AIToolsGrid = () => {
           className={`
             relative p-6 rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden text-center
             ${tool.isActive 
-              ? 'glass-effect border-2 border-neon-green shadow-lg shadow-neon-green/30' 
-              : 'glass-effect border border-white/10 hover:border-neon-green/50'
+              ? 'glass-effect border-2 border-neon-emerald shadow-lg shadow-neon-emerald/30' 
+              : 'glass-effect border border-white/10 hover:border-neon-emerald/50'
             }
           `}
           initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -131,8 +131,8 @@ export const AIToolsGrid = () => {
             y: -8, 
             scale: 1.05,
             boxShadow: tool.isActive 
-              ? '0 25px 50px rgba(0, 255, 136, 0.4)' 
-              : '0 20px 40px rgba(0, 255, 136, 0.2)'
+              ? '0 25px 50px rgba(16, 185, 129, 0.4)' 
+              : '0 20px 40px rgba(16, 185, 129, 0.2)'
           }}
           whileTap={{ scale: 0.95 }}
           onClick={() => toggleTool(tool.id)}
@@ -146,7 +146,7 @@ export const AIToolsGrid = () => {
           {/* Pulse effect for active tools */}
           {tool.isActive && (
             <motion.div
-              className="absolute inset-0 bg-neon-green/10 rounded-2xl"
+              className="absolute inset-0 bg-neon-emerald/10 rounded-2xl"
               animate={{ 
                 scale: [1, 1.05, 1],
                 opacity: [0.3, 0.1, 0.3]
@@ -158,15 +158,24 @@ export const AIToolsGrid = () => {
               }}
             />
           )}
+
+          {/* Shimmer effect */}
+          <motion.div
+            className="absolute inset-0 rounded-2xl animate-shimmer opacity-0 hover:opacity-100 transition-opacity duration-300"
+            style={{
+              background: 'linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent)',
+              backgroundSize: '200% 100%'
+            }}
+          />
           
           <div className="relative z-10">
             <motion.div
               className="mb-4 flex justify-center"
-              whileHover={{ rotate: 360 }}
+              whileHover={{ rotate: 360, scale: 1.1 }}
               transition={{ duration: 0.6 }}
             >
               <div className={`${
-                tool.isActive ? 'text-neon-green' : 'text-gray-300'
+                tool.isActive ? 'text-neon-emerald' : 'text-gray-300'
               }`}>
                 {tool.icon}
               </div>
@@ -186,7 +195,7 @@ export const AIToolsGrid = () => {
           {/* Status indicator */}
           <motion.div
             className={`absolute top-2 right-2 w-3 h-3 rounded-full ${
-              tool.isActive ? 'bg-neon-green' : 'bg-gray-500'
+              tool.isActive ? 'bg-neon-emerald' : 'bg-gray-500'
             }`}
             animate={{ 
               scale: tool.isActive ? [1, 1.2, 1] : 1,
@@ -198,13 +207,22 @@ export const AIToolsGrid = () => {
               ease: "easeInOut"
             }}
           />
-          
-          {/* Shimmer effect on hover */}
-          <motion.div
-            className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent"
-            whileHover={{ translateX: '100%' }}
-            transition={{ duration: 0.6 }}
-          />
+
+          {/* Active tool border animation */}
+          {tool.isActive && (
+            <motion.div
+              className="absolute inset-0 rounded-2xl border-2 border-neon-emerald"
+              animate={{ 
+                opacity: [0.3, 0.8, 0.3],
+                scale: [1, 1.02, 1]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          )}
         </motion.div>
       ))}
     </div>

@@ -18,7 +18,7 @@ export const NeuralNetwork = () => {
     const newConnections: Connection[] = []
     
     // Create random neural network connections
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 25; i++) {
       const x1 = Math.random() * 100
       const y1 = Math.random() * 100
       const x2 = Math.random() * 100
@@ -42,7 +42,7 @@ export const NeuralNetwork = () => {
   }, [])
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 opacity-10">
+    <div className="fixed inset-0 pointer-events-none z-0 opacity-8">
       <svg className="w-full h-full">
         {connections.map((connection) => (
           <motion.line
@@ -51,17 +51,17 @@ export const NeuralNetwork = () => {
             y1={`${connection.y1}%`}
             x2={`${connection.x2}%`}
             y2={`${connection.y2}%`}
-            stroke="url(#gradient)"
-            strokeWidth="1"
+            stroke="url(#newGradient)"
+            strokeWidth="1.5"
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{ 
               pathLength: 1, 
-              opacity: [0.1, 0.5, 0.1]
+              opacity: [0.1, 0.4, 0.1]
             }}
             transition={{
-              pathLength: { duration: 2, delay: connection.id * 0.1 },
+              pathLength: { duration: 2.5, delay: connection.id * 0.1 },
               opacity: { 
-                duration: 3, 
+                duration: 4, 
                 delay: connection.id * 0.1,
                 repeat: Infinity,
                 ease: "easeInOut"
@@ -71,31 +71,75 @@ export const NeuralNetwork = () => {
         ))}
         
         <defs>
-          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(0, 212, 255, 0.8)" />
-            <stop offset="50%" stopColor="rgba(184, 71, 255, 0.8)" />
-            <stop offset="100%" stopColor="rgba(0, 255, 136, 0.8)" />
+          <linearGradient id="newGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="rgba(251, 146, 60, 0.6)" />
+            <stop offset="25%" stopColor="rgba(245, 158, 11, 0.6)" />
+            <stop offset="50%" stopColor="rgba(16, 185, 129, 0.6)" />
+            <stop offset="75%" stopColor="rgba(6, 182, 212, 0.6)" />
+            <stop offset="100%" stopColor="rgba(192, 38, 211, 0.6)" />
           </linearGradient>
+          
+          <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(251, 146, 60, 0.8)" />
+            <stop offset="100%" stopColor="rgba(245, 158, 11, 0.4)" />
+          </radialGradient>
         </defs>
       </svg>
       
       {/* Neural nodes */}
-      {connections.slice(0, 10).map((connection) => (
+      {connections.slice(0, 12).map((connection, index) => {
+        const colors = [
+          'rgba(251, 146, 60, 0.8)',   // neon-orange
+          'rgba(245, 158, 11, 0.8)',   // neon-gold
+          'rgba(16, 185, 129, 0.8)',   // neon-emerald
+          'rgba(6, 182, 212, 0.8)',    // neon-cyan
+          'rgba(192, 38, 211, 0.8)'    // neon-magenta
+        ]
+        const nodeColor = colors[index % colors.length]
+        
+        return (
+          <motion.div
+            key={`node-${connection.id}`}
+            className="absolute w-3 h-3 rounded-full"
+            style={{
+              left: `${connection.x1}%`,
+              top: `${connection.y1}%`,
+              backgroundColor: nodeColor,
+              boxShadow: `0 0 15px ${nodeColor}`
+            }}
+            animate={{
+              scale: [1, 1.6, 1],
+              opacity: [0.3, 0.9, 0.3]
+            }}
+            transition={{
+              duration: 3,
+              delay: connection.id * 0.2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        )
+      })}
+
+      {/* Larger pulsing nodes */}
+      {[...Array(6)].map((_, i) => (
         <motion.div
-          key={`node-${connection.id}`}
-          className="absolute w-2 h-2 bg-neon-blue rounded-full"
+          key={`pulse-node-${i}`}
+          className="absolute w-4 h-4 rounded-full"
           style={{
-            left: `${connection.x1}%`,
-            top: `${connection.y1}%`,
-            boxShadow: '0 0 10px rgba(0, 212, 255, 0.8)'
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            background: 'radial-gradient(circle, rgba(251, 146, 60, 0.6) 0%, rgba(245, 158, 11, 0.3) 100%)',
+            filter: 'blur(1px)'
           }}
           animate={{
-            scale: [1, 1.5, 1],
-            opacity: [0.3, 0.8, 0.3]
+            scale: [1, 2, 1],
+            opacity: [0.2, 0.6, 0.2],
+            rotate: [0, 360, 0]
           }}
           transition={{
-            duration: 2,
-            delay: connection.id * 0.2,
+            duration: Math.random() * 6 + 4,
+            delay: Math.random() * 3,
             repeat: Infinity,
             ease: "easeInOut"
           }}
