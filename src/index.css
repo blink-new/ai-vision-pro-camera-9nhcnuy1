@@ -94,7 +94,6 @@
     background: hsl(var(--glass-bg));
     border: 1px solid hsl(var(--glass-border));
     backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
   }
   
   .neon-glow {
